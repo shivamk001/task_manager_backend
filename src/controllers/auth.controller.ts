@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../services/authService";
 import { CustomError } from "../utils/error";
 import { validationResult } from "express-validator";
+import logger from "../utils/logger";
 
 export class AuthController{
     public static async login(req: Request, res: Response, next: NextFunction){
@@ -27,7 +28,6 @@ export class AuthController{
     public static async register(req: Request, res: Response, next: NextFunction){
         try{
             const error=validationResult(req);
-            console.log('Profile:', req.body);
 
             if(!error.isEmpty()){
                 throw new CustomError(400, error.array().join(' '));
@@ -35,7 +35,11 @@ export class AuthController{
 
             const { email, name, password }=req.body;
 
+            logger.info(`New User Registration: ${email}, ${name}`);
+
             let newUser=await AuthService.registrationService(email, name, password);
+
+            logger.info(`User Registration Successful: ${email}, ${name}`);
 
             res.status(201).json({
                     message: 'User registration successful',

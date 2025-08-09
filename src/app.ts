@@ -1,24 +1,13 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cookieSession from 'cookie-session';
-import cors from 'cors';
 
+import AuthRouter from './routes/auth';
 import TaskRouter from './routes/task';
+import errorHandlingMiddleware from "./middlewares/errorHandler";
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
-
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-        } else {
-        callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-}));
 
 app.use(bodyParser.json());
 
@@ -32,6 +21,13 @@ app.get('/uptime', (req: Request, res: Response)=>{
     res.send('Up and running');
 });
 
+// Auth router
+app.use(AuthRouter);
+
+// Tasks router
 app.all('/tasks', TaskRouter);
+
+// error handling middleware
+app.use(errorHandlingMiddleware);
 
 export default app; 

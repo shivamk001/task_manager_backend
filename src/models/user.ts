@@ -1,5 +1,6 @@
 import mongoose, { Types } from "mongoose";
 import { Task, TaskDoc } from "./task";
+import { Password } from "../utils/password";
 
 // an interface that describes the properties 
 // required to create a new User
@@ -47,6 +48,12 @@ const userSchema=new mongoose.Schema<UserDoc>({
 userSchema.statics.build=(attrs: UserAttrs)=>{
     return new User(attrs);
 }
+
+userSchema.pre('save', async function(done){
+    const hashed=await Password.hash(this.get('password'));
+    this.set('password', hashed);
+    done();
+})
 
 const User=mongoose.model<UserDoc, UserModel>('User', userSchema);
 

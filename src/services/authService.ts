@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/user';
 import { CustomError } from '../utils/error';
 import { Password } from '../utils/password';
+import { Env } from '../utils/env';
 
 interface User{
     id: string;
@@ -49,14 +50,14 @@ export class AuthService{
         if(!passwordMatch){
             throw new CustomError(403, 'Incorrect Username or password');
         }
-
+        
         //generate jwt
+        let secret=Env.get('JWT_KEY');
         const userJWT=jwt.sign({
             id: existingUser.id,
             email: existingUser.email,
             userName: existingUser.name
-        }, process.env.JWT_KEY!, {expiresIn: '15m'});
-
+        }, secret, {expiresIn: '15m'});
 
         return {
             jwt: userJWT,
