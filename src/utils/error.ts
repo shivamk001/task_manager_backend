@@ -1,5 +1,3 @@
-import { ValidationError } from "express-validator";
-
 export class CustomError extends Error{
     public status: number;
     constructor(status: number, message: string){

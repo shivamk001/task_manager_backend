@@ -90,32 +90,40 @@ export class TaskService{
     
     public static async allSubTasks(taskId: string){
         // get all subtasks which are not deleted
-        let tasks: any=await Task
-                        .find({taskId: taskId})
+        let task=await Task
+                        .findById(taskId)
                         .populate('subtasks')
                         .lean();
 
-        return tasks.subtasks;
+        if(!task){
+            throw new CustomError(404, 'Task does not exist');
+        }
+
+        return task.subtasks;
     }    
     
     public static async updateSubTask(taskId: string, updatedSubtasks: SubTaskAttrs[]){
         // get all subtasks which are not deleted
-        let tasks=await Task
-                        .findById({id: taskId})
+        let task=await Task
+                        .findById(taskId)
                         .populate('subtasks') as TaskDoc;
+        
+        if(!task){
+            throw new CustomError(404, 'Task does not exist');
+        }
 
         // seperate the deleted subtasks
-        let deletedSubtasks=tasks.subtasks.filter(sub=>sub.deleted);
+        let deletedSubtasks=task.subtasks.filter(sub=>sub.deleted);
 
         // update the subtasks array
-        tasks.subtasks=[
+        task.subtasks=[
             ...updatedSubtasks,
             ...deletedSubtasks
         ];
 
-        await tasks.save();
+        await task.save();
 
-        return tasks.subtasks;
+        return task.subtasks;
     }
 
 
