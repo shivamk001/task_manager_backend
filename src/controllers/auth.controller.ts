@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { AuthService } from "../services/authService";
-import { CustomError } from "../utils/error";
+import { createErrorMessage, CustomError } from "../utils/error";
 import { validationResult } from "express-validator";
 import logger from "../utils/logger";
 
@@ -9,14 +9,19 @@ export class AuthController{
     public static async login(req: Request, res: Response, next: NextFunction){
         try{
             const error=validationResult(req);
-
+            
             if(!error.isEmpty()){
-                throw new CustomError(400, error.array().join(' '));
+                let errorMessage=createErrorMessage(error.array());
+                throw new CustomError(400, errorMessage);
             }
 
             const { email, password } = req.body;
 
             let result = await AuthService.loginService(email, password);
+
+            req.session={
+                jwt: result.jwt
+            }
 
             res.status(200).json(result);
 
@@ -28,9 +33,10 @@ export class AuthController{
     public static async register(req: Request, res: Response, next: NextFunction){
         try{
             const error=validationResult(req);
-
+            
             if(!error.isEmpty()){
-                throw new CustomError(400, error.array().join(' '));
+                let errorMessage=createErrorMessage(error.array());
+                throw new CustomError(400, errorMessage);
             }
 
             const { email, name, password }=req.body;

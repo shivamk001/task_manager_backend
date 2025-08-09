@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { Subtask } from "./subTask";
 import TaskStatus from "../utils/enums";
 
 export interface TaskDoc extends mongoose.Document{

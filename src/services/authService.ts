@@ -57,7 +57,7 @@ export class AuthService{
             id: existingUser.id,
             email: existingUser.email,
             userName: existingUser.name
-        }, secret, {expiresIn: '15m'});
+        }, secret, {expiresIn: '59m'});
 
         return {
             jwt: userJWT,

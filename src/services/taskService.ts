@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Task, TaskDoc, TaskAttrs, SubTaskAttrs } from "../models/task";
 import { User } from "../models/user";
 import TaskStatus from "../utils/enums";
@@ -5,9 +6,12 @@ import { CustomError } from "../utils/error";
 
 export class TaskService{
     public static async getAllTasks(userId: string){
-        let tasks=await User.findById({id: userId}).populate('tasks');
+        let doc=await User.findById(userId)
+            .select('tasks')
+            .populate('tasks')
+            .lean();
 
-        return tasks;
+        return doc!.tasks || [];
     }    
     
     public static async createTask(userId: string, subject: string, lastDate: string, status: TaskStatus){
@@ -38,39 +42,50 @@ export class TaskService{
     
     public static async updateTask(userId: string, taskId: string, updatedTask: TaskAttrs){
         // get the user
-        const user = await User.findById(userId);
-
+        const user = await User.findById(userId)
+                                .populate('tasks');
+;
+        console.log('user', user);
         if(!user){
             throw new CustomError(401, 'User not found');
         }
 
-        // get the task
-        const task = user.tasks.id(taskId);
-        if (!task) throw new Error("Task not found");
+        const task = user.tasks.find(
+            t => String(t._id) === taskId
+        );
 
+        if (!task) {
+            throw new Error("Task not found");
+        }
+
+        // apply updates to the populated task
         Object.assign(task, updatedTask);
-        await user.save();
+
+        // save the task directly since it's a separate model
+        await task.save();
 
         return task;
     }    
     
     public static async deleteTask(userId: string, taskId: string){
-        // get the user
-        const user = await User.findById(userId);
 
-        if(!user){
-            throw new CustomError(401, 'User not found');
+        // get the task with given userId and taskId
+        let task=await Task.findOne({
+            _id: new mongoose.Types.ObjectId(taskId),
+            userId: userId
+        });
+
+        if(!task){
+            throw new CustomError(404, 'Task does not exist');
         }
 
-        // get the task
-        const task = user.tasks.id(taskId);
-        if (!task) throw new Error("Task not found");
-
         // mark task as deleted
-        Object.assign(task, {deleted: true});
-        await user.save();
+        task.deleted=true;
 
-        return true; 
+        // save the task
+        await task.save();
+
+        return {message: 'Task deleted succesfully', id: task.id};
     }    
     
     public static async allSubTasks(taskId: string){

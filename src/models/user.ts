@@ -22,7 +22,7 @@ interface UserDoc extends mongoose.Document{
     name: string;
     email: string;
     password: string;
-    tasks: Types.DocumentArray<TaskDoc>;
+    tasks: TaskDoc[];
 }
 
 const userSchema=new mongoose.Schema<UserDoc>({

@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { TaskService } from "../services/taskService";
+import { validationResult } from "express-validator";
+import { createErrorMessage, CustomError } from "../utils/error";
 
 export class TaskController{
     public static async allTasks(req: Request, res: Response, next: NextFunction){
         try{
-            let {userId}=req.currentUser;
-            let tasks=await TaskService.getAllTasks(userId);
+            let {id}=req.currentUser;
+            let tasks=await TaskService.getAllTasks(id);
 
             res.status(200).json(tasks);
         }
@@ -16,9 +18,16 @@ export class TaskController{
 
     public static async createTask(req: Request, res: Response, next: NextFunction){
         try{
-            let {userId}=req.currentUser;
+            const error=validationResult(req);
+            
+            if(!error.isEmpty()){
+                let errorMessage=createErrorMessage(error.array());
+                throw new CustomError(400, errorMessage);
+            }
+
+            let {id}=req.currentUser;
             let {subject, lastDate, status}=req.body;
-            let newTask=await TaskService.createTask(userId, subject, lastDate, status);
+            let newTask=await TaskService.createTask(id, subject, lastDate, status);
 
             res.status(201).json(newTask);
         }
@@ -29,11 +38,18 @@ export class TaskController{
     
     public static async updateTask(req: Request, res: Response, next: NextFunction){
         try{
-            let {userId}=req.currentUser;
-            let {taskId}=req.params;
-            let {subject, lastDate, status}=req.body
+            const error=validationResult(req);
+            
+            if(!error.isEmpty()){
+                let errorMessage=createErrorMessage(error.array());
+                throw new CustomError(400, errorMessage);
+            }
 
-            let updatedTask=await TaskService.updateTask(userId, taskId, {subject: subject, deadline: lastDate, status, userId});
+            let {id}=req.currentUser;
+            let {taskId}=req.params;
+            let {subject, lastDate, status}=req.body;
+
+            let updatedTask=await TaskService.updateTask(id, taskId, {subject: subject, deadline: lastDate, status, userId: id});
 
             res.status(200).json(updatedTask);
         }
@@ -44,12 +60,12 @@ export class TaskController{
 
     public static async deleteTask(req: Request, res: Response, next: NextFunction){
         try{
-            let {userId}=req.currentUser;
+            let {id}=req.currentUser;
             let {taskId}=req.params;
             
-            await TaskService.deleteTask(userId, taskId);
+            let result=await TaskService.deleteTask(id, taskId);
 
-            res.status(204);
+            res.status(204).end();
         }
         catch(err){
             next(err);
