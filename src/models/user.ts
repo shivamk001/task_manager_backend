@@ -5,7 +5,8 @@ import { Task, TaskDoc } from "./task";
 // required to create a new User
 interface UserAttrs{
     email: string,
-    password: string
+    password: string,
+    name: string
 }
 
 // an interface that describes the properties
@@ -17,12 +18,13 @@ interface UserModel extends mongoose.Model<UserDoc>{
 // an interface that describes the properties
 // that a user document has
 interface UserDoc extends mongoose.Document{
+    name: string;
     email: string;
     password: string;
     tasks: Types.DocumentArray<TaskDoc>;
 }
 
-const userSchema=new mongoose.Schema({
+const userSchema=new mongoose.Schema<UserDoc>({
     name:{
         type: String,
         required: true

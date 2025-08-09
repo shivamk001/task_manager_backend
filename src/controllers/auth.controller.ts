@@ -13,9 +13,11 @@ export class AuthController{
                 throw new CustomError(400, error.array().join(' '));
             }
 
-            const { email, name, password } = req.body;
+            const { email, password } = req.body;
 
             let result = await AuthService.loginService(email, password);
+
+            res.status(200).json(result);
 
         }catch(err){
             next(err);
@@ -33,7 +35,12 @@ export class AuthController{
 
             const { email, name, password }=req.body;
 
-            let result = await AuthService.registrationService(email, name, password);
+            let newUser=await AuthService.registrationService(email, name, password);
+
+            res.status(201).json({
+                    message: 'User registration successful',
+                    ...newUser
+                });
 
         }
         catch(err){

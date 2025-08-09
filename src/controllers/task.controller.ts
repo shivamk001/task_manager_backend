@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { TaskService } from "../services/taskService";
 
 export class TaskController{
-    public static async allTasks(req: Request, res: Response){
+    public static async allTasks(req: Request, res: Response, next: NextFunction){
         try{
             let {userId}=req.currentUser;
             let tasks=await TaskService.getAllTasks(userId);
@@ -10,11 +10,11 @@ export class TaskController{
             res.status(200).json(tasks);
         }
         catch(err){
-            res.status(500).json(err);
+            next(err);
         }
     }
 
-    public static async createTask(req: Request, res: Response){
+    public static async createTask(req: Request, res: Response, next: NextFunction){
         try{
             let {userId}=req.currentUser;
             let {subject, lastDate, status}=req.body;
@@ -23,11 +23,11 @@ export class TaskController{
             res.status(201).json(newTask);
         }
         catch(err){
-            res.status(500).json(err);
+            next(err);
         }
     }    
     
-    public static async updateTask(req: Request, res: Response){
+    public static async updateTask(req: Request, res: Response, next: NextFunction){
         try{
             let {userId}=req.currentUser;
             let {taskId}=req.params;
@@ -38,11 +38,11 @@ export class TaskController{
             res.status(200).json(updatedTask);
         }
         catch(err){
-            res.status(500).json(err);
+            next(err);
         }
     }
 
-    public static async deleteTask(req: Request, res: Response){
+    public static async deleteTask(req: Request, res: Response, next: NextFunction){
         try{
             let {userId}=req.currentUser;
             let {taskId}=req.params;
@@ -52,11 +52,11 @@ export class TaskController{
             res.status(204);
         }
         catch(err){
-            res.status(500).json(err);
+            next(err);
         }
     }
 
-    public static async allSubTasks(req: Request, res: Response){
+    public static async allSubTasks(req: Request, res: Response, next: NextFunction){
         try{
             let {taskId}=req.params;
 
@@ -65,11 +65,11 @@ export class TaskController{
             res.status(200).json(subTasks);
         }
         catch(err){
-            res.status(500).json(err);
+            next(err);
         }
     }   
     
-    public static async updateSubTask(req: Request, res: Response){
+    public static async updateSubTask(req: Request, res: Response, next: NextFunction){
         try{
             let {taskId}=req.params;
             let {tasks}=req.body;
@@ -79,7 +79,7 @@ export class TaskController{
             res.status(200).json(updatedTasks);
         }
         catch(err){
-            res.status(500).json(err);
+            next(err);
         }
     }
 }
