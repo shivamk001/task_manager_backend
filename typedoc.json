@@ -1,0 +1,12 @@
+{
+    "entryPoints": ["src/routes/auth.ts"],
+    "out": "docs",
+    // "includeDeclarations": true,
+    "exclude": ["**/*.test.ts", "**/__tests__/**"],
+    "excludePrivate": true,
+    "excludeExternals": true,
+    "excludeNotDocumented": false,
+    "tsconfig": "tsconfig.json",
+    "readme": "none",
+    "plugin": []
+}

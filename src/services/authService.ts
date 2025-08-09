@@ -4,14 +4,29 @@ import { CustomError } from '../utils/error';
 import { Password } from '../utils/password';
 import { Env } from '../utils/env';
 
+/**
+ * Interface representing the user details returned on login.
+ */
 interface User{
     id: string;
     name: string;
     email: string;
 }
 
+/**
+ * Service class providing authentication related operations like registration and login.
+ */
 export class AuthService{
 
+    /**
+   * Registers a new user with the given email, name, and password.
+   * 
+   * @param email - User email address
+   * @param name - User full name
+   * @param password - Plaintext password to be hashed
+   * @returns Promise resolving to an object containing the registered user's name and email
+   * @throws CustomError if user already exists
+   */
     public static async registrationService(email: string, name: string, password: string): Promise<{name: string, email: string}>{
         // get the user
         let existingUser=await User.findOne({email: email});
@@ -35,6 +50,14 @@ export class AuthService{
         };
     }
 
+    /**
+   * Authenticates a user by email and password, and returns a JWT token on success.
+   * 
+   * @param email - User email address
+   * @param password - Plaintext password
+   * @returns Promise resolving to an object containing the JWT token and user info
+   * @throws CustomError if user not found or password mismatch
+   */
     public static async loginService(email: string, password: string): Promise<{jwt: string, user: User}>{
         // get the user
         let existingUser=await User.findOne({email: email});

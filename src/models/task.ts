@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import TaskStatus from "../utils/enums";
 
+/**
+ * Interface that describes a Task document in MongoDB.
+ */
 export interface TaskDoc extends mongoose.Document{
     id: string;
     subject: string;
@@ -16,10 +19,16 @@ export interface TaskDoc extends mongoose.Document{
     }[]
 }
 
+/**
+ * Interface describing the Task Model static methods.
+ */
 export interface TaskModel extends mongoose.Model<TaskDoc>{
     build(attrs: TaskAttrs): TaskDoc;
 }
 
+/**
+ * Attributes required to create a new Task.
+ */
 export interface TaskAttrs{
     subject: string;
     deadline: string;
@@ -27,6 +36,9 @@ export interface TaskAttrs{
     userId: string
 }
 
+/**
+ * Attributes for a SubTask.
+ */
 export interface SubTaskAttrs{
     subject: string;
     deadline: Date;
@@ -34,54 +46,67 @@ export interface SubTaskAttrs{
     deleted: boolean;
 }
 
+/**
+ * Mongoose schema for Task.
+ */
 const taskSchema=new mongoose.Schema<TaskDoc>({
     subject: {
         type: String,
-        require: true
+        required: true
     },
     deadline: {
         type: Date,
-        require: true
+        required: true
     },
     userId: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' 
+        ref: 'User',
+        required: true 
     },
     status: {
         type: String,
-        require: true,
+        required: true,
         default: 'in-progress',
         enum: [TaskStatus.InProgress, TaskStatus.Pending, TaskStatus.Done]
     },
     deleted: {
         type: Boolean,
         default: false,
-        require: true
+        required: true
     },
     subtasks: [{
-        subject: String,
+        subject: {
+            type: String,
+            required: true
+        },
         deadline: {
             type: Date,
-            require: true
+            required: true
         },
         status: {
             type: String,
-            require: true,
+            required: true,
             default: 'in-progress',
             enum: [TaskStatus.InProgress, TaskStatus.Pending, TaskStatus.Done]
         },
         deleted: {
             type: Boolean,
             default: false,
-            require: true
+            required: true
         }
     }]
 });
 
+/**
+ * Adds a static build method to Task model for type-safe creation.
+ */
 taskSchema.statics.build=(attrs: TaskAttrs)=>{
     return new Task(attrs);
 }
 
+/**
+ * The Task model.
+ */
 const Task=mongoose.model<TaskDoc, TaskModel>('Task', taskSchema);
 
 export {Task};

@@ -1,5 +1,9 @@
 import winston from "winston";
 
+/**
+ * Winston logger configuration.
+ * Defines custom log levels and outputs to console in simple format.
+ */
 const logger = winston.createLogger({
     levels: {
         error: 0,
