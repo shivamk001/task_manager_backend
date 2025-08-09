@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import cookieSession from 'cookie-session';
 import cors from 'cors';
 
+import TaskRouter from './routes/task';
+
 const app = express();
 
 const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
@@ -29,5 +31,7 @@ app.use(cookieSession({
 app.get('/uptime', (req: Request, res: Response)=>{
     res.send('Up and running');
 });
+
+app.all('/tasks', TaskRouter);
 
 export default app; 

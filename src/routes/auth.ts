@@ -1,7 +1,5 @@
-// user login logout currentuser
 import express from 'express';
 import { AuthController } from '../controllers/auth.controller';
-// import currentUser from '../middlewares/currentUser';
 import { body, query } from 'express-validator';
 
 const router = express.Router();
@@ -16,10 +14,10 @@ router.post('/auth/register',
                 .trim()
                 .notEmpty()
                 .withMessage('You must supply a password'),
-            body('userName')
+            body('name')
                 .trim()
                 .notEmpty()
-                .withMessage('You must supply a userName')
+                .withMessage('You must supply a name')
         ],
         AuthController.register);
 

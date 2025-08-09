@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
+import { Task, TaskDoc } from "./task";
 
 // an interface that describes the properties 
 // required to create a new User
@@ -18,6 +19,7 @@ interface UserModel extends mongoose.Model<UserDoc>{
 interface UserDoc extends mongoose.Document{
     email: string;
     password: string;
+    tasks: Types.DocumentArray<TaskDoc>;
 }
 
 const userSchema=new mongoose.Schema({
@@ -30,6 +32,10 @@ const userSchema=new mongoose.Schema({
         required: true,
         unique: true
     },
+    tasks: [{
+        type: mongoose.Schema.ObjectId,
+        ref: Task
+    }],
     password:{
         type: String,
         required: true

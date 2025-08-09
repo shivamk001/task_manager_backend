@@ -2,23 +2,40 @@ import mongoose from "mongoose";
 import { Subtask } from "./subTask";
 import TaskStatus from "../utils/enums";
 
-interface TaskDoc{
+export interface TaskDoc extends mongoose.Document{
+    id: string;
+    subject: string;
+    deadline: Date;
+    status: string;
+    userId: mongoose.Schema.Types.ObjectId;
+    deleted: boolean;
+    subtasks: {
+        subject: string;
+        deadline: Date;
+        status: string;
+        deleted: boolean;
+    }[]
+}
+
+export interface TaskModel extends mongoose.Model<TaskDoc>{
+    build(attrs: TaskAttrs): TaskDoc;
+}
+
+export interface TaskAttrs{
     subject: string;
     deadline: string;
     status: TaskStatus;
+    userId: string
 }
 
-interface TaskModel extends mongoose.Model<TaskDoc>{
-    build(attrs: TaskAttrs): void;
-}
-
-interface TaskAttrs{
+export interface SubTaskAttrs{
     subject: string;
-    deadline: string;
+    deadline: Date;
     status: TaskStatus;
+    deleted: boolean;
 }
 
-const taskSchema=new mongoose.Schema({
+const taskSchema=new mongoose.Schema<TaskDoc>({
     subject: {
         type: String,
         require: true
@@ -26,6 +43,10 @@ const taskSchema=new mongoose.Schema({
     deadline: {
         type: Date,
         require: true
+    },
+    userId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User' 
     },
     status: {
         type: String,
@@ -38,7 +59,28 @@ const taskSchema=new mongoose.Schema({
         default: false,
         require: true
     },
-    subtasks: [{type: mongoose.Schema.ObjectId, ref: Subtask}]
+    // userId: {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: User
+    // },
+    subtasks: [{
+        subject: String,
+        deadline: {
+            type: Date,
+            require: true
+        },
+        status: {
+            type: String,
+            require: true,
+            default: 'in-progress',
+            enum: [TaskStatus.InProgress, TaskStatus.Pending, TaskStatus.Done]
+        },
+        deleted: {
+            type: Boolean,
+            default: false,
+            require: true
+        }
+    }]
 });
 
 taskSchema.statics.build=(attrs: TaskAttrs)=>{

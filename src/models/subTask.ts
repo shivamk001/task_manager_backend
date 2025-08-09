@@ -26,6 +26,7 @@ const subtaskSchema=new mongoose.Schema({
         type: Date,
         require: true
     },
+    taskId: { type: mongoose.Schema.Types.ObjectId, ref: 'Task'},
     status: {
         type: String,
         require: true,
