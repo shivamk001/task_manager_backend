@@ -49,10 +49,13 @@ userSchema.statics.build=(attrs: UserAttrs)=>{
     return new User(attrs);
 }
 
-userSchema.pre('save', async function(done){
+userSchema.pre('save', async function(next){
+    if (!this.isModified('password')) {
+        return next();
+    }
     const hashed=await Password.hash(this.get('password'));
     this.set('password', hashed);
-    done();
+    next();
 })
 
 const User=mongoose.model<UserDoc, UserModel>('User', userSchema);

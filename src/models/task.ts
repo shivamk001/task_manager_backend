@@ -58,10 +58,6 @@ const taskSchema=new mongoose.Schema<TaskDoc>({
         default: false,
         require: true
     },
-    // userId: {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: User
-    // },
     subtasks: [{
         subject: String,
         deadline: {

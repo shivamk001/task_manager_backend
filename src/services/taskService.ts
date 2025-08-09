@@ -7,11 +7,20 @@ import { CustomError } from "../utils/error";
 export class TaskService{
     public static async getAllTasks(userId: string){
         let doc=await User.findById(userId)
-            .select('tasks')
-            .populate('tasks')
+            // .select('tasks')
+            .populate({
+                path: 'tasks',
+                match: { deleted: false }
+            })
             .lean();
+        
+        // filter all subtasks
+        let tasks=doc?.tasks.map(task=>{
+            task.subtasks=task.subtasks.filter(subtask=>!subtask.deleted)
+            return task;
+        })
 
-        return doc!.tasks || [];
+        return tasks || [];
     }    
     
     public static async createTask(userId: string, subject: string, lastDate: string, status: TaskStatus){
@@ -92,14 +101,17 @@ export class TaskService{
         // get all subtasks which are not deleted
         let task=await Task
                         .findById(taskId)
-                        .populate('subtasks')
+                        // .populate('subtasks')
                         .lean();
 
         if(!task){
             throw new CustomError(404, 'Task does not exist');
         }
 
-        return task.subtasks;
+        // remove all deleted tasks 
+        let subtasks=task.subtasks.filter(task=>!task.deleted);
+
+        return subtasks;
     }    
     
     public static async updateSubTask(taskId: string, updatedSubtasks: SubTaskAttrs[]){
@@ -121,9 +133,13 @@ export class TaskService{
             ...deletedSubtasks
         ];
 
+        // save the task with updated subtasks
         await task.save();
 
-        return task.subtasks;
+        // remove all deleted tasks 
+        let subtasks=task.subtasks.filter(task=>!task.deleted);
+
+        return subtasks;
     }
 
 
