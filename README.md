@@ -56,22 +56,15 @@ The project includes **authentication**, **session management**, and follows a m
 ---
 ## Code Documentation
 ### TypeDoc Documentation
-
-1. **Run the command**
-   ```bash
-   npm run doc
-   cd docs
-   ```
-2. **Run index.html file**
+You can check the typedoc documentation [here](https://shivamk001.github.io/task_manager/index.html).
 
 ## API Documentation
 ### Postman API Docs
-You can view and test the API endpoints using the Postman collection below:<br>
-[Postman Task Manager API Documentation](https://www.postman.com/shivamk001001/shivamk001/collection/r3sivui/task-manager?action=share&creator=18060545)
+You can view and test the API endpoints using the Postman collection [here](https://www.postman.com/shivamk001001/shivamk001/collection/r3sivui/task-manager?action=share&creator=18060545).
 
 ## Database Documentation
 ### Draw.io Diagram
-You can view the database diagram below:<br>
-[Draw.io Page Link](https://drive.google.com/file/d/1vXzrVMxXfg-msaUGYFJTNGVeJcU1mfZo/view?usp=sharing)
+You can view the database diagram [here](https://drive.google.com/file/d/1vXzrVMxXfg-msaUGYFJTNGVeJcU1mfZo/view?usp=sharing).
 
    
+
