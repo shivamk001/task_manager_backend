@@ -7,13 +7,15 @@ The project includes **authentication**, **session management**, and follows a m
 
 ## Features
 
+- Tasks creation, updation, deletion
+- Subtasks creation, deletion, upgradation
 - User authentication (login, register)
-- Session handling with Express sessions
 - Password hashing with bcrypt
 - MongoDB integration via Mongoose
 - Environment configuration loader
 - Structured logging
-- API documentation support (Postman / Swagger-ready)
+- API documentation support (Postman)
+- Code Documentation through TypeDoc
 
 ---
 
@@ -24,6 +26,8 @@ The project includes **authentication**, **session management**, and follows a m
 - **Express** – Web framework
 - **MongoDB** – NoSQL database
 - **express-validator** - input validation
+- **cookie-session** - cookie storage
+- **jsonwebtoken** - jwt token generation
 - **Mongoose** – MongoDB object modeling
 - **bcrypt** – Password hashing
 - **dotenv** – Environment variable management
@@ -67,5 +71,6 @@ You can view and test the API endpoints using the Postman collection [here](http
 You can view the database diagram [here](https://drive.google.com/file/d/1xMH_3G7nVZ0x7y9Fv4SZsvODlmXH2z3D/view?usp=sharing).
 
    
+
 
 
