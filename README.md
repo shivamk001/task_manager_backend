@@ -1,7 +1,7 @@
 # Task Manager API
 
-A backend REST API built with **Node.js**, **Express**, and **MongoDB** to manage tasks and users.  
-The project includes **authentication**, **session management**, and follows a modular, service-based structure.
+A backend REST API built with **Node.js**, **Typescript** **Express**, and **MongoDB** to manage tasks and users.  
+The project includes **authentication**, **task and subtask CRUD operations**, and follows a modular, service-based structure.
 
 ---
 
@@ -9,13 +9,15 @@ The project includes **authentication**, **session management**, and follows a m
 
 - Tasks creation, updation, deletion
 - Subtasks creation, deletion, upgradation
-- User authentication (login, register)
+- User authentication (login, register, logout)
 - Password hashing with bcrypt
+- JWT token storage through cookies
 - MongoDB integration via Mongoose
 - Environment configuration loader
 - Structured logging
-- API documentation support (Postman)
+- API Documentation in Postman
 - Code Documentation through TypeDoc
+- Database Documentation in Draw.io
 
 ---
 
@@ -72,6 +74,7 @@ You can check the Database documentation [here](https://docs.google.com/document
 You can view the database diagram [here](https://drive.google.com/file/d/1xMH_3G7nVZ0x7y9Fv4SZsvODlmXH2z3D/view?usp=sharing).
 
    
+
 
 
 
