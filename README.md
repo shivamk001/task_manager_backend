@@ -64,7 +64,8 @@ You can view and test the API endpoints using the Postman collection [here](http
 
 ## Database Documentation
 ### Draw.io Diagram
-You can view the database diagram [here](https://drive.google.com/file/d/1vXzrVMxXfg-msaUGYFJTNGVeJcU1mfZo/view?usp=sharing).
+You can view the database diagram [here](https://drive.google.com/file/d/1xMH_3G7nVZ0x7y9Fv4SZsvODlmXH2z3D/view?usp=sharing).
 
    
+
 
