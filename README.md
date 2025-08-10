@@ -39,7 +39,7 @@ The project includes **authentication**, **session management**, and follows a m
 1. **Clone the repository**
    ```bash
    git clone https://github.com/your-username/taskmanager.git
-   cd taskmanager
+   cd task_manager_backend
    ```
 2. **Install dependencies**
    ```bash
@@ -71,6 +71,7 @@ You can view and test the API endpoints using the Postman collection [here](http
 You can view the database diagram [here](https://drive.google.com/file/d/1xMH_3G7nVZ0x7y9Fv4SZsvODlmXH2z3D/view?usp=sharing).
 
    
+
 
 
 
