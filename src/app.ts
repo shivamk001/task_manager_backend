@@ -82,6 +82,8 @@ app.use(AuthRouter);
  * - `GET /tasks`
  * - `POST /tasks`
  * - `PUT /tasks/:taskId`
+ * 
+ * @see TaskRouter
  */
 app.use('/tasks', TaskRouter);
 
